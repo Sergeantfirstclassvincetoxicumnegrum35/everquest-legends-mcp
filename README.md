@@ -2,6 +2,14 @@
 
 Read-only Model Context Protocol server for EverQuest Legends public sources.
 
+## Status
+
+This project is public-ready but the repository may still be private until the owner flips GitHub visibility. It does not require secrets, cookies, credentials, or a Daybreak account.
+
+## Scope
+
+This MCP is for **EverQuest Legends**. It intentionally excludes general EQ1/EQ2, P99, EQEmu, Project Quarm, and other emulator/background databases unless a specific page is about EverQuest Legends.
+
 This server is built around public, unauthenticated sources:
 
 - EQL Wiki: `https://eqlwiki.com/Main_Page` via MediaWiki API
@@ -11,8 +19,6 @@ This server is built around public, unauthenticated sources:
 - Official EQL YouTube and Twitch channels
 - EQL-specific guide/interview/preview pages from EQProgression, EverQuest Guides, and selected press outlets
 - Pointer-only EQL community sources such as Reddit
-
-The curated source registry is scoped to EverQuest Legends only. General EQ1/EQ2, P99, EQEmu, Project Quarm, and other emulator/background databases are intentionally excluded.
 
 It does not log into Daybreak, manipulate an account, automate a game client, or send requests to private APIs.
 
@@ -40,9 +46,10 @@ It does not log into Daybreak, manipulate an account, automate a game client, or
 ## Local Usage
 
 ```bash
+git clone https://github.com/ArtSabintsev/everquest-legends-mcp.git
+cd everquest-legends-mcp
 npm install
 npm run build
-node dist/index.js
 ```
 
 For MCP clients that accept a JSON config:
@@ -58,6 +65,8 @@ For MCP clients that accept a JSON config:
 }
 ```
 
+If you are running from a different checkout path, replace the `args` path with your local `dist/index.js`.
+
 ## Development
 
 ```bash
@@ -66,6 +75,18 @@ npm test
 npm run build
 ```
 
+## Source Policy
+
+- Searchable sources should be stable public text pages about EverQuest Legends.
+- Official EQL, Daybreak, Game Jawn, original interviews, hands-on previews, and EQL-specific guide pages are preferred.
+- Social, Discord, forum, Twitch, and YouTube watch pages are pointer-only unless there is a stable public feed or transcript.
+- Daybreak Help pages are pointer-only because direct fetches can return Cloudflare challenge HTML.
+- Binary assets are exposed as metadata links; they are not downloaded by default.
+
 ## Notes
 
-The wiki is beta content and changes quickly. For current facts, prefer `eql_wiki_page`, `eql_wiki_search`, and `eql_official_news` over static assumptions.
+The wiki and beta coverage change quickly. For current facts, prefer `eql_wiki_page`, `eql_wiki_search`, `eql_official_news`, `eql_official_youtube_videos`, and official source pages over static assumptions.
+
+## License
+
+MIT
