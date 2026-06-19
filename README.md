@@ -1,10 +1,12 @@
 # EverQuest Legends MCP
 
+[![CI](https://github.com/ArtSabintsev/everquest-legends-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ArtSabintsev/everquest-legends-mcp/actions/workflows/ci.yml)
+
 Read-only Model Context Protocol server for EverQuest Legends public sources.
 
 ## Status
 
-This project is public-ready but the repository may still be private until the owner flips GitHub visibility. It does not require secrets, cookies, credentials, or a Daybreak account.
+This project is pre-1.0 and read-only. It does not require secrets, cookies, credentials, a Daybreak account, or private API access.
 
 ## Scope
 
@@ -43,7 +45,29 @@ It does not log into Daybreak, manipulate an account, automate a game client, or
 - `eql://classes`: class metadata
 - `eql://races`: launch race list
 
-## Local Usage
+## Usage
+
+Prerequisites:
+
+- Node.js `>=22`
+- npm
+
+This is a stdio MCP server. Your MCP client starts it as a child process.
+
+After the package is published to npm, MCP clients that accept a JSON config can run it directly with `npx`:
+
+```json
+{
+  "mcpServers": {
+    "everquest-legends": {
+      "command": "npx",
+      "args": ["-y", "everquest-legends-mcp"]
+    }
+  }
+}
+```
+
+## Local Development
 
 ```bash
 git clone https://github.com/ArtSabintsev/everquest-legends-mcp.git
@@ -59,21 +83,40 @@ For MCP clients that accept a JSON config:
   "mcpServers": {
     "everquest-legends": {
       "command": "node",
-      "args": ["/Users/arthur/Developer/everquest-legends-mcp/dist/index.js"]
+      "args": ["<path-to-checkout>/dist/index.js"]
     }
   }
 }
 ```
-
-If you are running from a different checkout path, replace the `args` path with your local `dist/index.js`.
-
-## Development
 
 ```bash
 npm run typecheck
 npm test
 npm run build
 ```
+
+## Tool Examples
+
+| Tool | Required input | Typical use |
+| --- | --- | --- |
+| `eql_sources` | none | List every configured source and see whether each source is searchable or pointer-only. |
+| `eql_source_fetch` | `id` | Fetch extracted text for a searchable source from `eql_sources`, such as `official-shop`. |
+| `eql_source_search` | `query` | Search curated official, guide, and press sources for EQL-specific text; failed fetches are returned in `failedSources`. |
+| `eql_wiki_search` | `query` | Search the EQL Wiki through MediaWiki full-text search. |
+| `eql_wiki_page` | `title` | Read an EQL Wiki page after finding it with `eql_wiki_search`. |
+| `eql_wiki_category_pages` | `category` | List pages in an EQL Wiki category. |
+| `eql_official_news` | none | List official EverQuest Legends news articles. |
+| `eql_official_article` | `pageNameOrUrl` | Read an official EQL news article by slug or `https://www.everquestlegends.com/news/...` URL. |
+| `eql_press_assets` | `kind` | List official Daybreak press asset metadata for `logos`, `artwork`, `screenshots`, `video`, or `fact-sheets`. |
+| `eql_official_youtube_videos` | none | List official EverQuest Legends YouTube video metadata from the channel RSS feed. |
+| `eql_class_combos` | none | Generate EQL three-class combinations from the public 16-class list. |
+
+Example user prompts for an MCP client:
+
+- "Use `eql_sources`, then fetch the official shop source."
+- "Search the EQL Wiki for race unlocks, then read the most relevant page."
+- "List official press screenshots for EverQuest Legends."
+- "Show the latest official EverQuest Legends YouTube videos."
 
 ## Source Policy
 

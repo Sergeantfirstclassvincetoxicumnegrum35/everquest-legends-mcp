@@ -30,6 +30,10 @@ type RawOfficialNewsArticle = {
   subtypeArray?: string[];
 };
 
+const OFFICIAL_NEWS_PATH_PREFIX = "/news/";
+const OFFICIAL_HOSTNAME = new URL(OFFICIAL_BASE_URL).hostname;
+const OFFICIAL_ARTICLE_PAGE_NAME_PATTERN = /^[a-z0-9][a-z0-9-]*$/i;
+
 export function parseOfficialNewsArticles(html: string): OfficialNewsArticle[] {
   const match = html.match(/window\.EQL\.News\.articles\s*=\s*(\[[^\n]*\])/);
   if (!match) {
@@ -53,10 +57,36 @@ export async function getOfficialNews(limit = 10): Promise<OfficialNewsArticle[]
   return parseOfficialNewsArticles(html).slice(0, Math.max(1, Math.min(limit, 50)));
 }
 
+export function resolveOfficialArticleUrl(pageNameOrUrl: string): string {
+  const input = pageNameOrUrl.trim();
+  if (!input) {
+    throw new Error("Official article page name is required.");
+  }
+
+  let pageName: string;
+  if (/^https?:\/\//i.test(input)) {
+    const parsed = new URL(input);
+    if (parsed.protocol !== "https:" || parsed.hostname !== OFFICIAL_HOSTNAME) {
+      throw new Error(`Official article URL must be an https URL on ${OFFICIAL_HOSTNAME}.`);
+    }
+    if (!parsed.pathname.startsWith(OFFICIAL_NEWS_PATH_PREFIX)) {
+      throw new Error("Official article URL must be under /news/.");
+    }
+    pageName = parsed.pathname.slice(OFFICIAL_NEWS_PATH_PREFIX.length);
+  } else {
+    pageName = input.replace(/^\/+/, "").replace(/^news\/+/i, "");
+  }
+
+  pageName = pageName.replace(/\/+$/, "");
+  if (!OFFICIAL_ARTICLE_PAGE_NAME_PATTERN.test(pageName)) {
+    throw new Error("Official article page name must be a single news slug.");
+  }
+
+  return `${OFFICIAL_BASE_URL}/news/${pageName}`;
+}
+
 export async function getOfficialArticle(pageNameOrUrl: string, maxCharacters = 12_000): Promise<OfficialArticle> {
-  const url = pageNameOrUrl.startsWith("http")
-    ? pageNameOrUrl
-    : `${OFFICIAL_BASE_URL}/news/${pageNameOrUrl.replace(/^\/?news\//, "")}`;
+  const url = resolveOfficialArticleUrl(pageNameOrUrl);
   const html = await fetchText(url, { cacheTtlMs: 60_000 });
   const $ = load(html);
   const title = cleanText($("meta[property='og:title']").attr("content") ?? $(".news-article-title").first().text() ?? $("title").text());

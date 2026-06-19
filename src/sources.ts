@@ -223,8 +223,8 @@ export const SOURCE_PAGES: readonly SourcePage[] = [
     kind: "official",
     title: "Game Jawn",
     url: "https://www.gamejawn.com/",
-    description: "Official Game Jawn studio site. Low EQL-specific text, but confirms the developer identity.",
-    searchable: true
+    description: "Official Game Jawn studio site. Pointer-only because the page has low EQL-specific text.",
+    searchable: false
   },
   {
     id: "daybreak-press-eqlegends",
@@ -351,8 +351,8 @@ export const SOURCE_PAGES: readonly SourcePage[] = [
     kind: "guide",
     title: "EverQuest Guides: Unofficial EQL FAQ",
     url: "https://www.everquestguides.com/everquest-articles/eq-legends-faq-unofficial/",
-    description: "Unofficial EQL FAQ aggregating official announcements, videos, dev comments, and beta observations.",
-    searchable: true
+    description: "Unofficial EQL FAQ aggregating official announcements, videos, dev comments, and beta observations. Pointer-only because it includes derived dev-comment material.",
+    searchable: false
   },
   {
     id: "everquestguides-multiclass",
@@ -367,8 +367,8 @@ export const SOURCE_PAGES: readonly SourcePage[] = [
     kind: "guide",
     title: "Unofficial EQ Legends FAQ",
     url: "https://eqlfaq.com/",
-    description: "Unofficial EQL FAQ aggregating Discord FAQ, dev comments, and source links.",
-    searchable: true
+    description: "Unofficial EQL FAQ aggregating Discord FAQ, dev comments, and source links. Pointer-only because it includes Discord-derived material.",
+    searchable: false
   },
   {
     id: "rpgsite-gdc-interview",

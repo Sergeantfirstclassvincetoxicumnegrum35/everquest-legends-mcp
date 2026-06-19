@@ -3,27 +3,47 @@
   "version": "0.1.0",
   "description": "Read-only MCP server for EverQuest Legends public sources.",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./package.json": "./package.json"
+  },
   "bin": {
     "everquest-legends-mcp": "dist/index.js"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CONTRIBUTING.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
     "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test",
     "start": "node dist/index.js",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [
+    "everquest-legends",
+    "eq-legends",
     "mcp",
+    "mcp-server",
     "model-context-protocol",
-    "everquest",
-    "everquest-legends"
+    "typescript",
+    "mediawiki",
+    "game-data",
+    "read-only",
+    "daybreak-games",
+    "game-jawn"
   ],
   "author": "Arthur Ariel Sabintsev",
   "license": "MIT",
@@ -36,7 +56,7 @@
   },
   "homepage": "https://github.com/ArtSabintsev/everquest-legends-mcp#readme",
   "engines": {
-    "node": ">=20.18"
+    "node": ">=22"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -44,7 +64,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
+    "@types/node": "^22",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"

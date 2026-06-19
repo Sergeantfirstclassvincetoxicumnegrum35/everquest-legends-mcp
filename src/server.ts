@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import * as z from "zod/v4";
-import { EQL_CLASSES, EQL_RACES, generateClassCombinations } from "./domain.js";
+import { EQL_CLASSES, EQL_CLASS_SOURCE, EQL_RACES, EQL_RACE_SOURCE, generateClassCombinations } from "./domain.js";
 import { getOfficialArticle, getOfficialNews } from "./official.js";
 import { listPressAssets, PRESS_ASSET_KINDS } from "./press.js";
 import { fetchSource, searchCuratedSources } from "./sourceSearch.js";
@@ -59,7 +59,7 @@ export function createServer(): McpServer {
         {
           uri: uri.href,
           mimeType: "application/json",
-          text: JSON.stringify({ classes: EQL_CLASSES }, null, 2)
+          text: JSON.stringify({ source: EQL_CLASS_SOURCE, classes: EQL_CLASSES }, null, 2)
         }
       ]
     })
@@ -78,7 +78,7 @@ export function createServer(): McpServer {
         {
           uri: uri.href,
           mimeType: "application/json",
-          text: JSON.stringify({ races: EQL_RACES }, null, 2)
+          text: JSON.stringify({ source: EQL_RACE_SOURCE, races: EQL_RACES }, null, 2)
         }
       ]
     })
@@ -119,17 +119,15 @@ export function createServer(): McpServer {
       title: "Search curated EQL sources",
       description: "Search across curated official, support, and guide pages. Use wiki-specific tools for full wiki search.",
       inputSchema: {
-        query: z.string().min(2).describe("Search terms."),
+        query: z.string().min(2).max(120).describe("Search terms."),
         limit: z.number().int().min(1).max(50).default(10),
         sourceIds: z.array(z.string()).optional().describe("Optional source id filter from eql_sources.")
       }
     },
     async ({ query, limit, sourceIds }) => {
-      const results = await searchCuratedSources(query, { limit, sourceIds });
-      return toolResult(`Found ${results.length} curated source matches for "${query}".`, {
-        query,
-        results
-      });
+      const search = await searchCuratedSources(query, { limit, sourceIds });
+      const failureNote = search.failedSources.length > 0 ? ` ${search.failedSources.length} source(s) failed and are listed in failedSources.` : "";
+      return toolResult(`Found ${search.results.length} curated source matches for "${search.query}".${failureNote}`, search);
     }
   );
 
@@ -215,9 +213,9 @@ export function createServer(): McpServer {
     "eql_official_article",
     {
       title: "Read official EQL article",
-      description: "Fetch an official EverQuest Legends news article by page name or full URL.",
+      description: "Fetch an official EverQuest Legends news article by page name or official /news/ URL.",
       inputSchema: {
-        pageNameOrUrl: z.string().min(1).describe("Article page name such as everquest-legends-preorder, /news/..., or full URL."),
+        pageNameOrUrl: z.string().min(1).describe("Article page name such as everquest-legends-preorder, /news/..., or https://www.everquestlegends.com/news/... URL."),
         maxCharacters: z.number().int().min(500).max(40_000).default(12_000)
       }
     },
@@ -273,6 +271,7 @@ export function createServer(): McpServer {
       return toolResult(`Generated ${combos.length} class combinations.`, {
         computedTotalUnfilteredCombinations: 560,
         note: "This enumerates unordered three-class sets from 16 classes. It does not validate race-specific primary-class unlocks.",
+        source: EQL_CLASS_SOURCE,
         include,
         exclude,
         combos

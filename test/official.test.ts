@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseOfficialNewsArticles } from "../src/official.js";
+import { parseOfficialNewsArticles, resolveOfficialArticleUrl } from "../src/official.js";
 
 describe("official news parsing", () => {
   it("extracts official article metadata from the inline news payload", () => {
@@ -20,5 +20,22 @@ describe("official news parsing", () => {
       url: "https://www.everquestlegends.com/news/everquest-legends-preorder"
     });
     expect(articles[0]?.publishedAt).toBe("2026-06-08T16:50:00.000Z");
+  });
+
+  it("normalizes official article slugs and official news URLs", () => {
+    expect(resolveOfficialArticleUrl("everquest-legends-preorder")).toBe("https://www.everquestlegends.com/news/everquest-legends-preorder");
+    expect(resolveOfficialArticleUrl("/news/everquest-legends-preorder")).toBe("https://www.everquestlegends.com/news/everquest-legends-preorder");
+    expect(resolveOfficialArticleUrl("https://www.everquestlegends.com/news/everquest-legends-preorder")).toBe(
+      "https://www.everquestlegends.com/news/everquest-legends-preorder"
+    );
+  });
+
+  it("rejects article inputs outside official https news pages", () => {
+    expect(() => resolveOfficialArticleUrl("http://127.0.0.1/news/everquest-legends-preorder")).toThrow(/https URL/);
+    expect(() => resolveOfficialArticleUrl("http://localhost/news/everquest-legends-preorder")).toThrow(/https URL/);
+    expect(() => resolveOfficialArticleUrl("http://169.254.169.254/latest/meta-data")).toThrow(/https URL/);
+    expect(() => resolveOfficialArticleUrl("https://example.com/news/everquest-legends-preorder")).toThrow(/https URL/);
+    expect(() => resolveOfficialArticleUrl("https://www.everquestlegends.com/home")).toThrow(/under \/news\//);
+    expect(() => resolveOfficialArticleUrl("/news/../../home")).toThrow(/single news slug/);
   });
 });

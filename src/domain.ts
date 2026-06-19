@@ -7,6 +7,27 @@ export type EqlClass = {
   wikiTitle: string;
 };
 
+export type DomainSourceMetadata = {
+  authority: "official" | "unofficial";
+  sourceKind: "community_wiki";
+  sourceUrl: string;
+  lastVerifiedAt: string;
+};
+
+export const EQL_CLASS_SOURCE: DomainSourceMetadata = {
+  authority: "unofficial",
+  sourceKind: "community_wiki",
+  sourceUrl: "https://eqlwiki.com/Character_Classes",
+  lastVerifiedAt: "2026-06-19"
+};
+
+export const EQL_RACE_SOURCE: DomainSourceMetadata = {
+  authority: "unofficial",
+  sourceKind: "community_wiki",
+  sourceUrl: "https://eqlwiki.com/Character_Races",
+  lastVerifiedAt: "2026-06-19"
+};
+
 export const EQL_CLASSES: readonly EqlClass[] = [
   { name: "Bard", abbreviation: "BRD", archetype: "hybrid", wikiTitle: "Bard" },
   { name: "Beastlord", abbreviation: "BST", archetype: "hybrid", wikiTitle: "Beastlord" },

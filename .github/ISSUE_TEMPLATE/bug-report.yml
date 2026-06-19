@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a problem with an MCP tool, source parser, or public source entry.
+title: "Bug: "
+labels:
+  - bug
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Project version or commit
+      placeholder: 0.1.0 or git commit SHA
+    validations:
+      required: true
+  - type: input
+    id: tool
+    attributes:
+      label: Tool or source
+      description: MCP tool name, source id, URL, or parser involved.
+      placeholder: eql_source_fetch / official-shop / https://...
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What failed or behaved incorrectly?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Include the tool call, source id, URL, or command needed to reproduce.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      placeholder: node --version
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: macOS 15, Ubuntu 24.04, Windows 11
+  - type: input
+    id: mcp_client
+    attributes:
+      label: MCP client
+      placeholder: Claude Desktop, Codex, custom client, etc.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or output
+      description: Paste relevant errors or command output.
+      render: text

@@ -10,6 +10,26 @@ This project is scoped to EverQuest Legends public sources only.
 - Prefer official pages, original interviews, hands-on previews, and EQL-specific guide pages for searchable sources.
 - Label unofficial community sources clearly.
 
+## Adding Or Changing Sources
+
+Source registry entries live in `src/sources.ts`.
+
+Use `searchable: true` only when the page is stable public text that `fetchSource` can extract without login, cookies, browser automation, private Discord access, or binary downloads. Use `searchable: false` for pointer-only sources, including social profiles, Discord, forums, Twitch, YouTube watch pages, Daybreak Help pages behind Cloudflare challenges, and binary assets.
+
+When adding a parser or source client, add focused tests under `test/`. Existing examples:
+
+- `test/official.test.ts` for official news payload parsing.
+- `test/press.test.ts` for press asset parsing.
+- `test/youtube.test.ts` for official YouTube RSS parsing.
+
+Before opening a pull request, run:
+
+```bash
+npm run typecheck
+npm test
+npm run build
+```
+
 ## Development
 
 ```bash

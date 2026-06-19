@@ -1,0 +1,58 @@
+name: EQL source request
+description: Suggest a public EverQuest Legends source for the registry.
+title: "Source: "
+labels:
+  - source
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project only accepts sources scoped to EverQuest Legends.
+        Do not submit generic EQ1/EQ2, P99, EQEmu, Project Quarm, or emulator/background database sources unless the specific page is about EverQuest Legends.
+  - type: input
+    id: url
+    attributes:
+      label: URL
+      description: Public source URL.
+      placeholder: https://www.everquestlegends.com/...
+    validations:
+      required: true
+  - type: dropdown
+    id: source_kind
+    attributes:
+      label: Source kind
+      options:
+        - official
+        - support
+        - press
+        - guide
+        - mediawiki
+        - community
+    validations:
+      required: true
+  - type: dropdown
+    id: handling
+    attributes:
+      label: Suggested handling
+      options:
+        - searchable
+        - pointer-only
+        - asset metadata
+    validations:
+      required: true
+  - type: checkboxes
+    id: access
+    attributes:
+      label: Access characteristics
+      options:
+        - label: The source is public without login.
+        - label: The source does not require private Discord, account cookies, or beta-only access.
+        - label: The source is stable text, a stable public feed, or metadata-only.
+        - label: The source is not a binary download by itself.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it belongs
+      description: Explain what EQL-specific information this source provides.
+    validations:
+      required: true
