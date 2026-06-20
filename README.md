@@ -90,7 +90,7 @@ It is distributed via GitHub (not the npm registry). MCP clients that accept a J
 }
 ```
 
-Pin to a release tag for reproducibility, e.g. `github:ArtSabintsev/everquest-legends-mcp#v1.0.0`. For a fixed local install, see Local Development below and point your client at `dist/index.js`.
+Pin to a release tag for reproducibility, e.g. `github:ArtSabintsev/everquest-legends-mcp#v1.1.0`. For a fixed local install, see Local Development below and point your client at `dist/index.js`.
 
 ## Local Development
 
@@ -154,6 +154,8 @@ Example user prompts for an MCP client:
 ## Notes
 
 The wiki and beta coverage change quickly. For current facts, prefer `eql_wiki_page`, `eql_wiki_search`, `eql_official_news`, `eql_official_youtube_videos`, and official source pages over static assumptions.
+
+EQL launches **pre-Kunark** (Antonica, Faydwer, Odus, plus the classic Planes of Sky, Hate, and Fear). The community wiki inherits classic EverQuest data, so pages routinely describe Kunark, Velious, and Luclin zones, cities, factions, items, and quests that are not in the launch game. `eql_wiki_page`, `eql_wiki_search`, and `eql_source_fetch` attach a structured `eraAdvisory` when they detect such references — check for it and do not treat flagged content as launch-live.
 
 ## License
 
