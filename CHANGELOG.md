@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-06-19
+
+### Added
+
+- Era awareness for inherited classic-EverQuest content. The EQL wiki (and some
+  curated guides) carry zones, cities, factions, items, and quests from later
+  expansions (Kunark, Velious, Luclin) that are **not** in EQL's pre-Kunark
+  launch (Antonica, Faydwer, Odus plus the classic Planes of Sky, Hate, and
+  Fear). `eql_wiki_page`, `eql_wiki_search`, and `eql_source_fetch` now detect
+  such references and attach a structured `eraAdvisory` (`eras`, `markers`,
+  `note`) so callers do not treat that content as launch-live. Pure launch
+  content is left untouched (no advisory). Detection lives in `src/era.ts`.
+
 ## [1.0.0] - 2026-06-19
 
 First stable release.

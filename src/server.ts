@@ -7,6 +7,7 @@ import { listPressAssets, PRESS_ASSET_KINDS } from "./press.js";
 import { fetchSource, searchCuratedSources } from "./sourceSearch.js";
 import { SOURCE_PAGES, SOURCE_SCOPE } from "./sources.js";
 import { getCategoryPages, getRecentChanges, getWikiPage, searchWiki } from "./mediawiki.js";
+import { detectNonLaunchEra } from "./era.js";
 import { getOfficialYouTubeVideos } from "./youtube.js";
 import { getVideoTranscript } from "./transcript.js";
 
@@ -25,7 +26,7 @@ function toolResult(summary: string, structuredContent: Record<string, unknown>)
 export function createServer(): McpServer {
   const server = new McpServer({
     name: "everquest-legends-mcp",
-    version: "1.0.0"
+    version: "1.1.0"
   });
 
   server.registerResource(
@@ -102,7 +103,8 @@ export function createServer(): McpServer {
     "eql_source_fetch",
     {
       title: "Fetch a curated EQL source",
-      description: "Fetch and extract text from a searchable curated public source by id.",
+      description:
+        "Fetch and extract text from a searchable curated public source by id. When the text references content from a later expansion (Kunark, Velious, Luclin) that is not in EQL's pre-Kunark launch, the result includes an eraAdvisory.",
       inputSchema: {
         id: z.string().describe("Source id from eql_sources, for example official-home or eqprogression-faq."),
         maxCharacters: z.number().int().min(500).max(40_000).default(12_000).describe("Maximum extracted text length.")
@@ -136,7 +138,8 @@ export function createServer(): McpServer {
     "eql_wiki_search",
     {
       title: "Search EQL Wiki",
-      description: "Full-text search the public EverQuest Legends MediaWiki.",
+      description:
+        "Full-text search the public EverQuest Legends MediaWiki. The wiki inherits classic EverQuest data; when result snippets reference later-expansion content (Kunark, Velious, Luclin) not in EQL's pre-Kunark launch, the response includes an eraAdvisory.",
       inputSchema: {
         query: z.string().min(2).describe("MediaWiki search query."),
         limit: z.number().int().min(1).max(50).default(10)
@@ -144,7 +147,12 @@ export function createServer(): McpServer {
     },
     async ({ query, limit }) => {
       const results = await searchWiki(query, limit);
-      return toolResult(`Found ${results.length} wiki matches for "${query}".`, { query, results });
+      const eraAdvisory = detectNonLaunchEra(results.map((result) => `${result.title}\n${result.snippet}`).join("\n"));
+      return toolResult(`Found ${results.length} wiki matches for "${query}".`, {
+        query,
+        results,
+        ...(eraAdvisory.flagged ? { eraAdvisory } : {})
+      });
     }
   );
 
@@ -152,7 +160,8 @@ export function createServer(): McpServer {
     "eql_wiki_page",
     {
       title: "Read EQL Wiki page",
-      description: "Fetch a page from EQL Wiki via MediaWiki API and return extracted text, links, categories, and revision metadata.",
+      description:
+        "Fetch a page from EQL Wiki via MediaWiki API and return extracted text, links, categories, and revision metadata. Pages inherit classic EverQuest data; when the text references later-expansion content (Kunark, Velious, Luclin) not in EQL's pre-Kunark launch, the page includes an eraAdvisory.",
       inputSchema: {
         title: z.string().min(1).describe("Wiki page title, for example Character Classes, Nagafen, or Build Guides."),
         maxCharacters: z.number().int().min(500).max(40_000).default(12_000).describe("Maximum extracted body length.")
